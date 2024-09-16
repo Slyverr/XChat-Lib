@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Represents a text-section composed of a combination of multiple texts.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 public final class ChatTextSection {
 

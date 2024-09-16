@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents different colors for chat texts.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 public enum TextColor {
 

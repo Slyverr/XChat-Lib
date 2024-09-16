@@ -3,7 +3,7 @@ package com.slyvr.chat.style;
 /**
  * Represents different states of alignments for chat texts.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 public enum TextAlignment {
 

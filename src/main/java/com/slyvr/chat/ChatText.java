@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * Represents a single chat-text.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 public final class ChatText {
 

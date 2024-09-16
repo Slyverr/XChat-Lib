@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Utilities for chat-texts.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 public final class ChatTextUtils {
 

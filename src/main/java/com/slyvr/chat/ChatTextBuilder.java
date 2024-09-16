@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * The ChatTextBuilder class allows for the combination of multiple chat-texts by providing a simple and convenient way to append them together.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 public final class ChatTextBuilder implements Cloneable {
 

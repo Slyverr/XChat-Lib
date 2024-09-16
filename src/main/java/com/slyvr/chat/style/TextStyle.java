@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents different styles of chat texts.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 public enum TextStyle {
 
