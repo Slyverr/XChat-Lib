@@ -243,7 +243,10 @@ public final class ChatText {
 
     @Override
     public String toString() {
-        return "ChatText{Text: " + component.getText() + ",Text-Color: " + component.getColor() + ",Text-Styles: " + Arrays.toString(getStyles()) + "}";
+        return "ChatText{" +
+                "text='" + component.getText() + '\'' +
+                ", color=" + getColor() +
+                ", styles=" + Arrays.toString(getStyles()) +
+                '}';
     }
-
 }

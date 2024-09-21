@@ -270,7 +270,11 @@ public final class ChatTextBuilder implements Cloneable {
 
     @Override
     public String toString() {
-        return "ChatTextBuilder{Parts: " + parts + ", Pointer: " + pointer + "}";
+        return "ChatTextBuilder{" +
+                "parts=" + parts +
+                ", pointer=" + pointer +
+                ", text='" + text + '\'' +
+                '}';
     }
 
     /**
