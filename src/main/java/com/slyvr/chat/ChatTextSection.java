@@ -17,7 +17,7 @@ import java.util.List;
  */
 public final class ChatTextSection {
 
-    private final List<SectionLine> section_parts = new ArrayList<>();
+    private final List<SectionLine<?>> section_parts = new ArrayList<>();
 
     /**
      * Constructs a new text-section.
@@ -140,30 +140,32 @@ public final class ChatTextSection {
         if (player == null)
             return;
 
-        for (SectionLine line : section_parts)
+        for (SectionLine<?> line : section_parts)
             line.sendText(player);
     }
-
+    
     /**
      * Represents a line for a text-section.
      *
      * @since 1.0
      */
-    private interface SectionLine {
+    private interface SectionLine<T> {
 
         /**
          * Aligns the text according to the given alignment type.
          *
+         * @param obj       The obj to align.
          * @param alignment The type of alignment.
          **/
-        void align(@NotNull TextAlignment alignment);
+        void align(@NotNull T obj, @NotNull TextAlignment alignment);
 
         /**
          * Aligns the text by the specified number of spaces.
          *
+         * @param obj    The object to align.
          * @param spaces The number of spaces to align by.
          */
-        void align(int spaces);
+        void align(@NotNull T obj, int spaces);
 
         /**
          * Sends and displays this line to the given player.
@@ -174,25 +176,20 @@ public final class ChatTextSection {
 
     }
 
-    private static final class StringLine implements SectionLine {
+    private static final class StringLine implements SectionLine<String> {
 
-        private final String text;
         private String[] aligned;
 
         public StringLine(@NotNull String text, @NotNull TextAlignment alignment) {
-            this.text = text;
-
-            this.align(alignment);
+            this.align(text, alignment);
         }
 
         public StringLine(@NotNull String text, int spaces) {
-            this.text = text;
-
-            this.align(spaces);
+            this.align(text, spaces);
         }
 
         @Override
-        public void align(@NotNull TextAlignment alignment) {
+        public void align(@NotNull String text, @NotNull TextAlignment alignment) {
             switch (alignment) {
                 case LEFT:
                     this.aligned = new String[]{text};
@@ -208,7 +205,12 @@ public final class ChatTextSection {
         }
 
         @Override
-        public void align(int spaces) {
+        public void align(@NotNull String text, int spaces) {
+            if (spaces <= 0) {
+                this.align(text, TextAlignment.LEFT);
+                return;
+            }
+
             this.aligned = ChatTextUtils.split(text, spaces).toArray(new String[0]);
         }
 
@@ -219,42 +221,42 @@ public final class ChatTextSection {
 
     }
 
-    private static final class TextLine implements SectionLine {
+    private static final class TextLine implements SectionLine<ChatText> {
 
-        private final TextComponent component;
         private TextComponent[] aligned;
 
         public TextLine(@NotNull ChatText text, @NotNull TextAlignment alignment) {
-            this.component = text.toTextComponent();
-
-            this.align(alignment);
+            this.align(text, alignment);
         }
 
         public TextLine(@NotNull ChatText text, int spaces) {
-            this.component = text.toTextComponent();
-
-            this.align(spaces);
+            this.align(text, spaces);
         }
 
         @Override
-        public void align(@NotNull TextAlignment alignment) {
+        public void align(@NotNull ChatText text, @NotNull TextAlignment alignment) {
             switch (alignment) {
                 case LEFT:
-                    this.aligned = new TextComponent[]{component};
+                    this.aligned = new TextComponent[]{text.toTextComponent()};
                     break;
                 case CENTER:
-                    this.aligned = align(component, 6);
+                    this.aligned = align(text.toTextComponent(), 6);
                     break;
                 case RIGHT:
-                    this.aligned = align(component, 3);
+                    this.aligned = align(text.toTextComponent(), 3);
                     break;
             }
 
         }
 
         @Override
-        public void align(int spaces) {
-            this.aligned = copy(ChatTextUtils.split(component.toLegacyText(), spaces));
+        public void align(@NotNull ChatText text, int spaces) {
+            if (spaces <= 0) {
+                this.align(text, TextAlignment.LEFT);
+                return;
+            }
+
+            this.aligned = copy(ChatTextUtils.split(text.getTextWithFormatting(), spaces), text.toTextComponent());
         }
 
         @Override
@@ -265,15 +267,15 @@ public final class ChatTextSection {
 
         @NotNull
         private TextComponent[] align(@NotNull TextComponent comp, int factor) {
-            return copy(ChatTextUtils.align(component.toLegacyText(), factor));
+            return copy(ChatTextUtils.align(comp.toLegacyText(), factor), comp);
         }
 
         @NotNull
-        private TextComponent[] copy(@NotNull List<String> lines) {
+        private TextComponent[] copy(@NotNull List<String> lines, @NotNull TextComponent def) {
             TextComponent[] result = new TextComponent[lines.size()];
 
             for (int i = 0; i < lines.size(); i++) {
-                TextComponent comp = new TextComponent(component);
+                TextComponent comp = new TextComponent(def);
                 comp.setText(lines.get(i));
 
                 result[i] = comp;
