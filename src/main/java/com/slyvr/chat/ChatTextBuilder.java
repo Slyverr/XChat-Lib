@@ -33,6 +33,7 @@ public final class ChatTextBuilder implements Cloneable {
     public ChatTextBuilder(@NotNull ChatText... initial) {
         Preconditions.checkNotNull(initial, "The initial chat-texts collection cannot be null!");
 
+        this.text = "";
         this.append(initial);
     }
 
@@ -69,7 +70,9 @@ public final class ChatTextBuilder implements Cloneable {
     }
 
     /**
-     * Gets the text representing all the append
+     * Gets the text representing all the appended chat-texts with color codes.
+     *
+     * @return The text with color codes.
      */
     @NotNull
     public String getTextWithFormatting() {
@@ -85,12 +88,15 @@ public final class ChatTextBuilder implements Cloneable {
      */
     @NotNull
     public ChatTextBuilder append(@NotNull ChatText... texts) {
+        if (texts == null)
+            return this;
+
         for (ChatText text : texts) {
             if (text == null)
                 continue;
 
             this.parts.add(text);
-            this.text += text.getText();
+            this.text += text.getTextWithFormatting();
         }
 
         this.pointer = parts.size() - 1;
@@ -285,7 +291,7 @@ public final class ChatTextBuilder implements Cloneable {
      * @return True if the index is valid, otherwise false
      */
     private boolean isValidIndex(int index) {
-        return !parts.isEmpty() && index >= 0 && index <= parts.size();
+        return index >= 0 && index < parts.size();
     }
 
 }
