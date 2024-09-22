@@ -84,8 +84,8 @@ public final class ChatTextUtils {
      * @return The width of the text
      */
     public static int getTextWidth(@NotNull String text) {
+        int maximum = text.length() - 1;
         int result = 0;
-        int chars = 0;
 
         boolean isColor = false;
         boolean isBold = false;
@@ -107,10 +107,9 @@ public final class ChatTextUtils {
             }
 
             result += getCharacterWidth(character, isBold);
-            chars++;
+            if (character != ' ' && i != maximum)
+                result++;
         }
-
-        result += chars - 1;
 
         return result;
     }
@@ -158,6 +157,7 @@ public final class ChatTextUtils {
      *
      * @return The aligned text
      */
+    @NotNull
     public static String alignToRight(@NotNull String text) {
         return getEmptyLine(getSpacesToRight(getTextWidth(text))) + text;
     }
@@ -174,14 +174,13 @@ public final class ChatTextUtils {
     public static List<String> split(@NotNull String text, int spaces) {
         List<String> lines = new ArrayList<>();
 
-        String empty = ChatColor.RESET + getEmptyLine(spaces);
-
         int text_width = spaces * 3;
         int last_index = 0;
 
         boolean isColor = false;
         boolean isBold = false;
 
+        String empty = ChatColor.RESET + getEmptyLine(spaces);
         for (int i = 0; i < text.length(); i++) {
             char character = text.charAt(i);
 
@@ -199,7 +198,7 @@ public final class ChatTextUtils {
             }
 
             int char_width = getCharacterWidth(character, isBold);
-            if (i != text.length() - 1)
+            if (character != ' ' && i != text.length() - 1)
                 char_width++;
 
             if (text_width + char_width <= ChatTextUtils.DEFAULT_CHAT_WIDTH) {
@@ -270,7 +269,7 @@ public final class ChatTextUtils {
             }
 
             int char_width = getCharacterWidth(character, isBold);
-            if (i != text.length() - 1)
+            if (character != ' ' && i != text.length() - 1)
                 char_width++;
 
             if (text_width + char_width <= ChatTextUtils.DEFAULT_CHAT_WIDTH) {
