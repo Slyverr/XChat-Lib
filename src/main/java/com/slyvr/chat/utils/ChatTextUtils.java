@@ -1,5 +1,6 @@
 package com.slyvr.chat.utils;
 
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.map.MapFont;
 import org.bukkit.map.MinecraftFont;
@@ -308,6 +309,28 @@ public final class ChatTextUtils {
             builder.append(' ');
 
         return builder.toString();
+    }
+
+    /**
+     * Copies all formatting and styles from the source component to the destination.
+     *
+     * @param src  The source component containing formatting to be copied.
+     * @param dest The destination component where formatting will be applied.
+     *
+     * @return The destination component with copied formatting.
+     */
+    @NotNull
+    public static TextComponent copyFormatting(@NotNull TextComponent src, @NotNull TextComponent dest) {
+        dest.setColor(src.getColor());
+        dest.setBold(src.isBold());
+        dest.setItalic(src.isItalic());
+        dest.setUnderlined(src.isUnderlined());
+        dest.setStrikethrough(src.isStrikethrough());
+        dest.setObfuscated(src.isObfuscated());
+        dest.setClickEvent(src.getClickEvent());
+        dest.setHoverEvent(src.getHoverEvent());
+
+        return dest;
     }
 
 }
